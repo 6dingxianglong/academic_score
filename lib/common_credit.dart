@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'data.dart';
-
 
 var commonCredit=[];
-int _weigrhCount = 0;
-double? _scoreAverage;
+
+int commonCredit_weigrhCount = 0;
+double? commonCredit_scoreAverage;
+int commonCredit_scoreCount=0;
 
 class common_credit extends StatefulWidget {
   const common_credit({Key? key}) : super(key: key);
@@ -19,38 +19,42 @@ class _common_creditState extends State<common_credit> {
   String? _name;
   int? _weigth;
   int? _score;
-  int _scoreCount=0;
+
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0),
+        child:AppBar(
+          title:Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:  [
+              Text(
+                '共同學分門檻：$commonCredit_weigrhCount/12',
+                style: TextStyle(
+                  fontSize: 20, // 大小
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '共同學分平均：$commonCredit_scoreAverage 分',
+                style: TextStyle(
+                  fontSize: 20, // 大小
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
 
-        title:Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:  [
-            Text(
-              '共同學分門檻：$_weigrhCount/12',
-              style: TextStyle(
-                fontSize: 20, // 大小
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              '共同學分平均：$_scoreAverage 分',
-              style: TextStyle(
-                fontSize: 20, // 大小
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+            ],
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromRGBO(5,178,145,1),
+
         ),
-        centerTitle: true,
-        backgroundColor: Color.fromRGBO(5,178,145,1),
-
       ),
       body: Container(
+        color:Color.fromRGBO(236, 240, 241, 1),
         child: Column(
           children: [
             Row(
@@ -122,18 +126,20 @@ class _common_creditState extends State<common_credit> {
                         ),
                       ),
                       onPressed: () {
+                          if(_name!=null && _weigth!=null && _score!=null){
+                            if(commonCredit.contains([_name,_weigth,_score])){
 
-                          if(commonCredit.contains([_name,_weigth,_score])){
-
-                          }else{
-                            setState((){
-                              commonCredit.add([_name,_weigth,_score]);
-                            });
-                            _weigrhCount+=_weigth!;
-                            _scoreCount+=(_weigth!*_score!);
-                            _scoreAverage=(_scoreCount/_weigrhCount).roundToDouble();
+                            }else{
+                              setState((){
+                                commonCredit.add([_name,_weigth,_score]);
+                              });
+                              commonCredit_weigrhCount+=_weigth!;
+                              commonCredit_scoreCount+=(_weigth!*_score!);
+                              commonCredit_scoreAverage=(commonCredit_scoreCount/commonCredit_weigrhCount).roundToDouble();
+                            }
                           }
                           },
+
                     ),
                     SizedBox(width: 20,),
                   ],
@@ -182,9 +188,9 @@ class _common_creditState extends State<common_credit> {
                                     int count2 =course[2];
                                     //因為 A value of type 'num' can't be assigned to a variable of type 'int'.
                                     //所以先把course[1]放進變數，再做運算
-                                    _weigrhCount-=count;
-                                    _scoreCount-=(count*count2);
-                                    _scoreAverage=(_scoreCount/_weigrhCount).roundToDouble();
+                                    commonCredit_weigrhCount-=count;
+                                    commonCredit_scoreCount-=(count*count2);
+                                    commonCredit_scoreAverage=(commonCredit_scoreCount/commonCredit_weigrhCount).roundToDouble();
 
                                         setState(() {
                                           commonCredit.removeAt(index);

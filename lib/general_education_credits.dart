@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+var generalEducationCredits=[];
+
 class general_education_credits extends StatefulWidget {
   const general_education_credits({Key? key}) : super(key: key);
 
