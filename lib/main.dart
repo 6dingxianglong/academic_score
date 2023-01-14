@@ -14,22 +14,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return const MaterialApp(
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-
-
   final String title;
 
   @override
@@ -53,7 +45,17 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('學分計算機',style: TextStyle(color: Colors.black),),
         centerTitle: true,
-        backgroundColor: Color.fromRGBO(200,200,200,1),
+        backgroundColor: Color.fromRGBO(5,158,145,1),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: Icon(Icons.calculate),
+              onPressed: () {
+
+              },
+            );
+          },
+        ),
       ),
       body: screens[currentIndex],
       bottomNavigationBar:BottomNavigationBar(
