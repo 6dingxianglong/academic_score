@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 var generalEducationCredits=[];
 int generalEducationCredits_weigrhCount = 0;
+int generalEducationCredits_weigrhCount_pass=0;
 double? generalEducationCredits_scoreAverage;
 int generalEducationCredits_scoreCount=0;
 
-List<String> generalEducationCredits_list = <String>['類型', '核心1', '核心2', '核心3','通識'];
+List<String> generalEducationCredits_list = <String>['類型', '核心1', '核心2', '核心3','博雅'];
 
 
 class general_education_credits extends StatefulWidget {
@@ -32,7 +34,7 @@ class _general_education_creditsState extends State<general_education_credits> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '通識學分門檻：$generalEducationCredits_weigrhCount/16',
+                '通識學分門檻：$generalEducationCredits_weigrhCount_pass/16',
                 style: TextStyle(
                   fontSize: 20, // 大小
                   fontWeight: FontWeight.bold,
@@ -158,14 +160,26 @@ class _general_education_creditsState extends State<general_education_credits> {
                         setState(() {
                           generalEducationCredits.add([_name, _weigth, _score,dropdownValue]);
                         });
+                        if(_score!>=60){
+                          generalEducationCredits_weigrhCount_pass+=_weigth!;
+                        }
                         generalEducationCredits_weigrhCount += _weigth!;
-                        generalEducationCredits_scoreCount +=
-                        (_weigth! * _score!);
+                        generalEducationCredits_scoreCount += (_weigth! * _score!);
                         generalEducationCredits_scoreAverage =
                             (generalEducationCredits_scoreCount /
                                 generalEducationCredits_weigrhCount)
                                 .roundToDouble();
                       }
+                    } else{
+                      Fluttertoast.showToast(
+                          msg: "課程名稱、類型、權重、分數皆避填",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
                     }
                   },
 
@@ -175,7 +189,7 @@ class _general_education_creditsState extends State<general_education_credits> {
             ),
             SizedBox(height: 20,),
             const Text(
-              "課程/權重/學分",
+              "課程/權重/學分/類型",
               style: TextStyle(
                 fontSize: 20, // 大小
                 fontWeight: FontWeight.bold,
@@ -217,9 +231,11 @@ class _general_education_creditsState extends State<general_education_credits> {
                               int count2 = course[2];
                               //因為 A value of type 'num' can't be assigned to a variable of type 'int'.
                               //所以先把course[1]放進變數，再做運算
-                              generalEducationCredits_weigrhCount -= count;
-                              generalEducationCredits_scoreCount -=
-                              (count * count2);
+                              if(course[1]!=0 && course[2]>=60){
+                                generalEducationCredits_weigrhCount_pass -= count;
+                                generalEducationCredits_weigrhCount -= count;
+                              }
+                              generalEducationCredits_scoreCount -= (count * count2);
                               generalEducationCredits_scoreAverage =
                                   (generalEducationCredits_scoreCount /
                                       generalEducationCredits_weigrhCount)

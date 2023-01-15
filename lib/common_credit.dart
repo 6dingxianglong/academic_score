@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 
 var commonCredit=[];
 
 int commonCredit_weigrhCount = 0;
+int commonCredit_weigrhCount_pass=0;
 double? commonCredit_scoreAverage;
 int commonCredit_scoreCount=0;
 
@@ -32,7 +33,7 @@ class _common_creditState extends State<common_credit> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children:  [
               Text(
-                '共同學分門檻：$commonCredit_weigrhCount/12',
+                '共同學分門檻：$commonCredit_weigrhCount_pass/12',
                 style: TextStyle(
                   fontSize: 20, // 大小
                   fontWeight: FontWeight.bold,
@@ -133,10 +134,23 @@ class _common_creditState extends State<common_credit> {
                               setState((){
                                 commonCredit.add([_name,_weigth,_score]);
                               });
+                              if(_score!>=60){
+                                commonCredit_weigrhCount_pass+=_weigth!;
+                              }
                               commonCredit_weigrhCount+=_weigth!;
                               commonCredit_scoreCount+=(_weigth!*_score!);
                               commonCredit_scoreAverage=(commonCredit_scoreCount/commonCredit_weigrhCount).roundToDouble();
                             }
+                          }else{
+                            Fluttertoast.showToast(
+                                msg: "課程名稱、權重、分數皆避填",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0
+                            );
                           }
                           },
 
@@ -188,7 +202,9 @@ class _common_creditState extends State<common_credit> {
                                     int count2 =course[2];
                                     //因為 A value of type 'num' can't be assigned to a variable of type 'int'.
                                     //所以先把course[1]放進變數，再做運算
-                                    commonCredit_weigrhCount-=count;
+                                    if(course[1]!=0 && course[2]>=60){
+                                      commonCredit_weigrhCount_pass-=count;
+                                    commonCredit_weigrhCount-=count;}
                                     commonCredit_scoreCount-=(count*count2);
                                     commonCredit_scoreAverage=(commonCredit_scoreCount/commonCredit_weigrhCount).roundToDouble();
 

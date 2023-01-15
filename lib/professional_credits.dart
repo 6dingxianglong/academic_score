@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 var professionalCredits=[];
 int professionalCredits_weigrhCount = 0;
+int professionalCredits_weigrhCount_pass =0;
 double? professionalCredits_scoreAverage;
 int professionalCredits_scoreCount=0;
 
@@ -32,7 +34,7 @@ class _professional_creditsState extends State<professional_credits> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '專業學分門檻：$professionalCredits_weigrhCount/16',
+                '專業學分門檻：$professionalCredits_weigrhCount_pass/100',
                 style: TextStyle(
                   fontSize: 20, // 大小
                   fontWeight: FontWeight.bold,
@@ -161,6 +163,9 @@ class _professional_creditsState extends State<professional_credits> {
                           professionalCredits.add(
                               [_name, _weigth, _score, dropdownValue]);
                         });
+                        if(_score!>=60){
+                          professionalCredits_weigrhCount_pass+=_weigth!;
+                        }
                         professionalCredits_weigrhCount += _weigth!;
                         professionalCredits_scoreCount +=
                         (_weigth! * _score!);
@@ -169,6 +174,16 @@ class _professional_creditsState extends State<professional_credits> {
                                 professionalCredits_weigrhCount)
                                 .roundToDouble();
                       }
+                    } else{
+                      Fluttertoast.showToast(
+                          msg: "課程名稱、類型、權重、分數皆避填",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                      );
                     }
                   },
 
@@ -178,7 +193,7 @@ class _professional_creditsState extends State<professional_credits> {
             ),
             SizedBox(height: 20,),
             const Text(
-              "課程/權重/學分",
+              "課程/權重/學分/類型",
               style: TextStyle(
                 fontSize: 20, // 大小
                 fontWeight: FontWeight.bold,
@@ -220,9 +235,11 @@ class _professional_creditsState extends State<professional_credits> {
                               int count2 = course[2];
                               //因為 A value of type 'num' can't be assigned to a variable of type 'int'.
                               //所以先把course[1]放進變數，再做運算
-                              professionalCredits_weigrhCount -= count;
-                              professionalCredits_scoreCount -=
-                              (count * count2);
+                              if(course[1]!=0 && course[2]>=60){
+                                professionalCredits_weigrhCount_pass-=count;
+                                professionalCredits_weigrhCount -= count;
+                              }
+                              professionalCredits_scoreCount -= (count * count2);
                               professionalCredits_scoreAverage =
                                   (professionalCredits_scoreCount /
                                       professionalCredits_weigrhCount)
